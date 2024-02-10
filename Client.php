@@ -2,8 +2,6 @@
 
 namespace Ant\Http;
 
-use CurlHandle;
-
 class Client
 {
     public function request(Request $request): Response
@@ -23,7 +21,11 @@ class Client
             [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADERFUNCTION => $headerCallback,
-                CURLOPT_HTTPHEADER => array_map((fn($key, $value) => $key . ': ' . $value), $request->getHeaders())
+                CURLOPT_HTTPHEADER => array_map(
+                    fn($key, $value) => $key . ': ' . $value,
+                    array_keys($request->getHeaders()),
+                    $request->getHeaders()
+                )
             ]
         );
 
