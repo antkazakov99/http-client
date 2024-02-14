@@ -4,7 +4,7 @@ namespace Ant\Http;
 
 class Client
 {
-    public function request(Request $request): Response
+    public function request(Request $request, array $options): Response
     {
         $curlHandle = curl_init($request->getUri());
         $headers = [];
@@ -35,6 +35,9 @@ class Client
 
         // Method setting
         curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, $request->getMethod()->value);
+
+        // Additional options
+        curl_setopt_array($curlHandle, $options);
 
         $responseBody = curl_exec($curlHandle) ?: null;
         $statusCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
